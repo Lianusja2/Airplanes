@@ -1,4 +1,9 @@
-public interface Plane {
+package planes;
+
+import common.HasId;
+
+public interface Plane extends HasId {
+
     double getMaxDistance();
 
     int getNumberOfPeople();
@@ -6,5 +11,7 @@ public interface Plane {
     double getCarryingWeight();
 
     double getFuelUsage();
+
+    String getModel();
 
 }
