@@ -2,7 +2,9 @@ package planes;
 
 import common.HasId;
 
-public interface Plane extends HasId {
+import java.io.Serializable;
+
+public interface Plane extends HasId, Serializable {
 
     double getMaxDistance();
 

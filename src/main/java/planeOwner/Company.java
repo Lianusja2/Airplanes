@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class Company implements Corporation {
 
     private String name;
-    private List<Plane> airplanes;
+    private List<Plane> airplanes ;
     private String id;
 
     public Company(String name) {

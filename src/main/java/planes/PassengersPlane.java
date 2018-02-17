@@ -7,9 +7,6 @@ public class PassengersPlane extends CivilAircraft {
     private int numberOfCrew;
     private String id;
 
-
-
-
     public PassengersPlane(String model, double fuelUsage, double maxDistance, CivilAircraftType civilType, int numberOfPassengers, int numberOfCrew) throws IllegalAccessException {
         super(model,fuelUsage, maxDistance, civilType);
         if(numberOfPassengers <=0){
