@@ -66,7 +66,7 @@ public class Client {
     }
 
     private static boolean continueInquiringInformation(Scanner sc, Company currentCompany, boolean validInfoRequested) {
-        boolean shouldStop = true;
+        boolean shouldStop = validInfoRequested;
         if (Objects.nonNull(currentCompany) && validInfoRequested) {
             System.out.println("Would you like to continue inquiring information  about this company?[yes/no]");
             String reply = sc.next();
