@@ -1,7 +1,7 @@
 package runner;
 
-import planeOwner.Company;
-import planeOwner.CompanyFiles;
+import plane_Owner.Company;
+import plane_Owner.CompanyService;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,13 +9,17 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
-public class Client {
-    private final static Logger LOGGER = Logger.getLogger(Client.class.getName());
+class Menu {
+    private final static Logger LOGGER = Logger.getLogger(Menu.class.getName());
+    private final List<Company> companies;
+    private final CompanyService companyService;
 
-    public static void main(String[] args) throws IllegalAccessException, IOException, ClassNotFoundException {
+    Menu(List<Company> companies) {
+        this.companies = companies;
+        this.companyService = new CompanyService();
+    }
 
-        List<Company> companies = CompanyFiles.readBinaryFilmsFromFile("CompaniesList");
-
+    void run() throws IllegalAccessException, IOException, ClassNotFoundException {
         Scanner sc = new Scanner(System.in);
         Company currentCompany = null;
         while (currentCompany == null) {
@@ -23,9 +27,9 @@ public class Client {
             companies.forEach(company -> System.out.println("Press  " + companies.indexOf(company) + " to select " + company.getName()));
             int companyIndex = handelNumberFormat(sc);
             boolean validInfoRequested = false;
-            try{
-                currentCompany = companies.get(companyIndex);}
-            catch(IndexOutOfBoundsException e){
+            try {
+                currentCompany = companies.get(companyIndex);
+            } catch (IndexOutOfBoundsException e) {
                 System.out.println("Invalid digit entered! Please enter digit from the list");
                 validInfoRequested = true;
             }
@@ -43,17 +47,17 @@ public class Client {
                         currentCompany = null;
                         break;
                     case 1:
-                        System.out.println("Total Number of People: " + currentCompany.getNumberOfPeopleOnBoard());
+                        System.out.println("Total Number of People: " + companyService.getNumberOfPeopleOnBoard(currentCompany));
                         break;
                     case 2:
-                        System.out.println("Total carrying weight: " + currentCompany.getTotalCarryingWeight());
+                        System.out.println("Total carrying weight: " + companyService.getTotalCarryingWeight(currentCompany));
                         break;
                     case 3:
                         filterByFuelUsage(sc, currentCompany);
                         break;
                     case 4:
-                        currentCompany.sortPlanes(currentCompany.byMaxDistance());
-                        System.out.println(currentCompany.getAirplanes());
+                        companyService.sortPlanes(currentCompany, companyService.byMaxDistance());
+                        System.out.println(currentCompany != null ? currentCompany.getAirplanes() : null);
                         break;
                     default:
                         System.out.println("You have selected incorrect number. Please try again");
@@ -65,7 +69,7 @@ public class Client {
         }
     }
 
-    private static boolean continueInquiringInformation(Scanner sc, Company currentCompany, boolean validInfoRequested) {
+    private boolean continueInquiringInformation(Scanner sc, Company currentCompany, boolean validInfoRequested) {
         boolean shouldStop = validInfoRequested;
         if (Objects.nonNull(currentCompany) && validInfoRequested) {
             System.out.println("Would you like to continue inquiring information  about this company?[yes/no]");
@@ -79,7 +83,7 @@ public class Client {
         return shouldStop;
     }
 
-    private static void filterByFuelUsage(Scanner sc, Company currentCompany) {
+    private void filterByFuelUsage(Scanner sc, Company currentCompany) {
         int min, max;
         boolean validArguments = false;
         while (!validArguments) {
@@ -88,7 +92,7 @@ public class Client {
             System.out.println("Please enter max fuel usage");
             max = sc.nextInt();
             try {
-                System.out.println("List of airplanes filtered by fuel usage: " + currentCompany.filterPlanes(currentCompany.byFuelUsage(min, max)));
+                System.out.println("List of airplanes filtered by fuel usage: " + companyService.filterPlanes(currentCompany, companyService.byFuelUsage(min, max)));
                 validArguments = true;
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
@@ -96,7 +100,7 @@ public class Client {
         }
     }
 
-    private static int handelNumberFormat(Scanner sc) {
+    private int handelNumberFormat(Scanner sc) {
         int localInt = 0;
         boolean isValid = false;
         while (!isValid) {
@@ -109,6 +113,5 @@ public class Client {
         }
         return localInt;
     }
-
 
 }

@@ -1,8 +1,7 @@
 package runner;
 
-import planeOwner.Company;
-import planeOwner.CompanyFiles;
-import planeOwner.Corporation;
+import plane_Owner.Company;
+import plane_Owner.CompanyService;
 import planes.CargoPlane;
 import planes.CivilAircraftType;
 import planes.PassengersPlane;
@@ -38,7 +37,7 @@ public class GenerateFileWithCompanies {
         List<Company> companies = new ArrayList<>(Arrays.asList(mau, lufthansa, wizzair));
 
         try {
-            CompanyFiles.outputBinaryFilmsIntoFile(companies, "CompaniesList");
+           new CompanyService().writeBinaryCompaniesIntoFile(companies, "CompaniesList");
         } catch (IOException e) {
             e.printStackTrace();
         }
