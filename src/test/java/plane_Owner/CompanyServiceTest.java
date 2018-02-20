@@ -19,7 +19,7 @@ import static org.hamcrest.core.Is.is;
 
 public class CompanyServiceTest {
     private Company mau;
-    private CompanyService companyService;
+    private CorporationService companyService;
     private CivilAircraft cargoPlane, passengerPlane;
     private List<Company> companies;
     private String fileName = "TestCompaniesList";

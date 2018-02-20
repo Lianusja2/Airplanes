@@ -13,6 +13,4 @@ public class Main {
         Menu menu = new Menu(companies);
         menu.run();
     }
-
-
 }

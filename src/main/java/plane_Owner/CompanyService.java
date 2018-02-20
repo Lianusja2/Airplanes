@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class CompanyService {
+public class CompanyService implements CorporationService {
 
     public void writeBinaryCompaniesIntoFile(List<Company> films, String fileName) throws IOException {
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(fileName)))) {

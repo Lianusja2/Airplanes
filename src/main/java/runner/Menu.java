@@ -2,8 +2,11 @@ package runner;
 
 import plane_Owner.Company;
 import plane_Owner.CompanyService;
+import plane_Owner.CorporationService;
+import planes.Plane;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -12,14 +15,14 @@ import java.util.logging.Logger;
 class Menu {
     private final static Logger LOGGER = Logger.getLogger(Menu.class.getName());
     private final List<Company> companies;
-    private final CompanyService companyService;
+    private final CorporationService companyService;
 
     Menu(List<Company> companies) {
         this.companies = companies;
         this.companyService = new CompanyService();
     }
 
-    void run() throws IllegalAccessException, IOException, ClassNotFoundException {
+    public void run() throws IllegalAccessException, IOException, ClassNotFoundException {
         Scanner sc = new Scanner(System.in);
         Company currentCompany = null;
         while (currentCompany == null) {
@@ -53,7 +56,7 @@ class Menu {
                         System.out.println("Total carrying weight: " + companyService.getTotalCarryingWeight(currentCompany));
                         break;
                     case 3:
-                        filterByFuelUsage(sc, currentCompany);
+                        System.out.println("List of airplanes filtered by fuel usage: " + filterByFuelUsage(sc, currentCompany));
                         break;
                     case 4:
                         companyService.sortPlanes(currentCompany, companyService.byMaxDistance());
@@ -69,7 +72,7 @@ class Menu {
         }
     }
 
-    private boolean continueInquiringInformation(Scanner sc, Company currentCompany, boolean validInfoRequested) {
+    boolean continueInquiringInformation(Scanner sc, Company currentCompany, boolean validInfoRequested) {
         boolean shouldStop = validInfoRequested;
         if (Objects.nonNull(currentCompany) && validInfoRequested) {
             System.out.println("Would you like to continue inquiring information  about this company?[yes/no]");
@@ -83,24 +86,26 @@ class Menu {
         return shouldStop;
     }
 
-    private void filterByFuelUsage(Scanner sc, Company currentCompany) {
+    List<Plane> filterByFuelUsage(Scanner sc, Company currentCompany) {
+        List<Plane> planes = new ArrayList<>();
         int min, max;
         boolean validArguments = false;
         while (!validArguments) {
             System.out.println("Please enter min fuel usage");
-            min = sc.nextInt();
+            min = handelNumberFormat(sc);
             System.out.println("Please enter max fuel usage");
-            max = sc.nextInt();
+            max = handelNumberFormat(sc);
             try {
-                System.out.println("List of airplanes filtered by fuel usage: " + companyService.filterPlanes(currentCompany, companyService.byFuelUsage(min, max)));
+                planes = companyService.filterPlanes(currentCompany, companyService.byFuelUsage(min, max));
                 validArguments = true;
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
         }
+        return planes;
     }
 
-    private int handelNumberFormat(Scanner sc) {
+    int handelNumberFormat(Scanner sc) {
         int localInt = 0;
         boolean isValid = false;
         while (!isValid) {
